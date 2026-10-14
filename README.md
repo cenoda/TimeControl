@@ -13,7 +13,8 @@ cycles, or other simulation work. Use high multipliers with care.
 
 ## Install
 
-In Mindustry, open **Mods > Import Mod > Import from GitHub** and enter:
+Find **Time Control** in Mindustry's mod browser, or open
+**Mods > Import Mod > Import from GitHub** and enter:
 
 ```text
 cenoda/TimeControl

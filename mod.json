@@ -1,9 +1,9 @@
 {
 	"name": "time-control",
 	"displayName": "Time Control",
-	"author": "[royal]sk7725[]",
-	"description": "Speeds up or slows down Mindustry.\nDrag the slider to change the speed.\n\n[scarlet]Disclaimer: not intended for multiplayer use![]",
-  "version": "0.2",
+	"author": "[royal]sk7725[] [lightgray](maintained by cenoda)[]",
+	"description": "Speeds up or slows down single-player Mindustry.\nDrag the slider to change the speed.\n\n[scarlet]Disabled in multiplayer. High speeds may skip simulation work.[]",
+  "version": "0.3",
 	"hidden": true,
-	"minGameVersion": 136
+	"minGameVersion": 160
 }

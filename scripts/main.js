@@ -7,6 +7,15 @@ let unfoldTimer = 0;
 let timeSlider = null;
 let foldedButton = null;
 
+function isMultiplayer(){
+    return Vars.net != null && Vars.net.active();
+}
+
+function applySpeed(){
+    let speed = Math.pow(2, curSpeed);
+    Time.setDeltaProvider(() => Math.min(Core.graphics.getDeltaTime() * 60 * speed, 3 * speed));
+}
+
 function sliderTable(table){
     table.table(Tex.buttonEdge3, t => {
         t.name = "tc-slidertable";
@@ -19,18 +28,20 @@ function sliderTable(table){
             folded = true;
         }).grow().width(10.5 * 8).get();
         l.margin(0);
-        let lStyle = l.getStyle();
+        let lStyle = new TextButton.TextButtonStyle(l.getStyle());
         lStyle.up = Tex.pane;
         lStyle.over = Tex.flatDownBase;
         lStyle.down = Tex.whitePane;
+        l.setStyle(lStyle);
         
         let b = t.button(new TextureRegionDrawable(Icon.refresh), 24, () => timeSlider.setValue(0)).padLeft(6).get();
-        b.getStyle().imageUpColor = Pal.accent;
+        let bStyle = new ImageButton.ImageButtonStyle(b.getStyle());
+        bStyle.imageUpColor = Pal.accent;
+        b.setStyle(bStyle);
         t.add(timeSlider).padLeft(6).minWidth(200);
         timeSlider.moved(v => {
             curSpeed = v;
-            let speed = Math.pow(2, v);
-            Time.setDeltaProvider(() => Math.min(Core.graphics.getDeltaTime() * 60 * speed, 3 * speed));
+            applySpeed();
             
             Tmp.c1.lerp(cols, (timeSlider.getValue() + 8) / 16);
             
@@ -47,8 +58,7 @@ function foldedButtonTable(table){
             curSpeed++;
             if(curSpeed > 2) curSpeed = -2;
             
-            let speed = Math.pow(2, curSpeed);
-            Time.setDeltaProvider(() => Math.min(Core.graphics.getDeltaTime() * 60 * speed, 3 * speed));
+            applySpeed();
             
             foldedButton.setText(speedText(curSpeed));
             timeSlider.setValue(curSpeed);
@@ -82,6 +92,7 @@ function speedText(speed){
 }
 
 function visibility(){
+    if(isMultiplayer()) return false;
     if(!Vars.ui.hudfrag.shown || Vars.ui.minimapfrag.shown()) return false;
     if(!Vars.mobile) return true;
     
@@ -105,5 +116,9 @@ if(!Vars.headless){
             st.moveBy(0, Scl.scl(46));
             ft.moveBy(0, Scl.scl(46));
         }
+    });
+
+    Events.on(WorldLoadEvent, () => {
+        if(!isMultiplayer()) applySpeed();
     });
 }
